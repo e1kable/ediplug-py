@@ -37,5 +37,5 @@ p = SmartPlug("192.168.1.117", ("admin", "1234"))
 
 # device info is returned as dictonary
 for i in sorted(p.info.items()):
-  print("%s: %s" % i)
+  print(("%s: %s" % i))
 

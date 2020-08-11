@@ -46,8 +46,8 @@ for day in p.schedule:
     if len(day["sched"]) > 0:
 
         # print day information
-        print("Schedules for: %s (%s)" % (days[day["day"]], day["state"]))
+        print(("Schedules for: %s (%s)" % (days[day["day"]], day["state"])))
 
         # print scheduled hours
         for sched in day["sched"]:
-            print(" * %02d:%02d - %02d:%02d" % (sched[0][0], sched[0][1], sched[1][0], sched[1][1]))
+            print((" * %02d:%02d - %02d:%02d" % (sched[0][0], sched[0][1], sched[1][0], sched[1][1])))

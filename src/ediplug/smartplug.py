@@ -335,7 +335,7 @@ class SmartPlug(object):
 
             except Exception as e:
 
-                print(e.__str__())
+                print((e.__str__()))
 
         return None
 
@@ -591,7 +591,7 @@ class SmartPlug(object):
 
         except Exception as e:
 
-            print(e.__str__())
+            print((e.__str__()))
 
         return sched
 
@@ -622,88 +622,87 @@ class SmartPlug(object):
 
         return res
 
-if __name__ == "__main__":
+print("test")
+usage = "%prog [options]"
 
-    usage = "%prog [options]"
+parser = par.OptionParser(usage)
 
-    parser = par.OptionParser(usage)
+parser.add_option("-v", "--verbose",  action="store_true", help="Print debug information")
 
-    parser.add_option("-v", "--verbose",  action="store_true", help="Print debug information")
+parser.add_option("-H", "--host",  default="172.16.100.75", help="Base URL of the SmartPlug")
+parser.add_option("-l", "--login",  default="admin", help="Login user to authenticate with SmartPlug")
+parser.add_option("-p", "--password",  default="1234", help="Password to authenticate with SmartPlug")
 
-    parser.add_option("-H", "--host",  default="172.16.100.75", help="Base URL of the SmartPlug")
-    parser.add_option("-l", "--login",  default="admin", help="Login user to authenticate with SmartPlug")
-    parser.add_option("-p", "--password",  default="1234", help="Password to authenticate with SmartPlug")
+parser.add_option("-i", "--info",  action="store_true", help="Get plug information")
+parser.add_option("-g", "--get",  action="store_true", help="Get state of plug")
+parser.add_option("-s", "--set",  help="Set state of plug: ON or OFF")
 
-    parser.add_option("-i", "--info",  action="store_true", help="Get plug information")
-    parser.add_option("-g", "--get",  action="store_true", help="Get state of plug")
-    parser.add_option("-s", "--set",  help="Set state of plug: ON or OFF")
+parser.add_option("-w", "--power",  action="store_true", help="Get plug power consumption (only SP2101W)")
+parser.add_option("-a", "--current",  action="store_true", help="Get plug current consumption (only SP2101W)")
 
-    parser.add_option("-w", "--power",  action="store_true", help="Get plug power consumption (only SP2101W)")
-    parser.add_option("-a", "--current",  action="store_true", help="Get plug current consumption (only SP2101W)")
+parser.add_option("-G", "--getsched", action="store_true", help="Get schedule from Plug")
+parser.add_option("-P", "--getschedpy", action="store_true", help="Get schedule from Plug as Python list")
+parser.add_option("-S", "--setsched", help="Set schedule of Plug")
 
-    parser.add_option("-G", "--getsched", action="store_true", help="Get schedule from Plug")
-    parser.add_option("-P", "--getschedpy", action="store_true", help="Get schedule from Plug as Python list")
-    parser.add_option("-S", "--setsched", help="Set schedule of Plug")
+(options, args) = parser.parse_args()
 
-    (options, args) = parser.parse_args()
+# this turns on debugging
+level = log.ERROR
 
-    # this turns on debugging
-    level = log.ERROR
+if options.verbose:
+	level = log.DEBUG
 
-    if options.verbose:
-        level = log.DEBUG
+log.basicConfig(level=level, format='%(asctime)s - %(levelname) 8s [%(module) 15s] - %(message)s')
 
-    log.basicConfig(level=level, format='%(asctime)s - %(levelname) 8s [%(module) 15s] - %(message)s')
+p = SmartPlug(options.host, (options.login, options.password))
 
-    p = SmartPlug(options.host, (options.login, options.password))
+if options.info:
 
-    if options.info:
+	print("Plug info:")
+	for i in sorted(p.info.items()):
+		print(("- %s: %s" % i))
 
-        print("Plug info:")
-        for i in sorted(p.info.items()):
-            print("- %s: %s" % i)
+if options.get:
 
-    if options.get:
+	print((p.state))
 
-        print(p.state)
+elif options.set:
 
-    elif options.set:
+	p.state = options.set
 
-        p.state = options.set
+if options.power:
 
-    if options.power:
+	print(("%s W" % p.power))
 
-        print("%s W" % p.power)
+if options.current:
 
-    if options.current:
+	print(("%s A" % p.current))
 
-        print("%s A" % p.current)
+elif options.getsched:
 
-    elif options.getsched:
+	days = {0: "Sunday", 1: "Monday", 2: "Tuesday", 3: "Wednesday",
+			4: "Thursday", 5: "Friday", 6: "Saturday"}
 
-        days = {0: "Sunday", 1: "Monday", 2: "Tuesday", 3: "Wednesday",
-                4: "Thursday", 5: "Friday", 6: "Saturday"}
+	for day in p.schedule:
 
-        for day in p.schedule:
+		if len(day["sched"]) > 0:
+			print(("Schedules for: %s (%s)" % (days[day["day"]], day["state"])))
 
-            if len(day["sched"]) > 0:
-                print("Schedules for: %s (%s)" % (days[day["day"]], day["state"]))
+		for sched in day["sched"]:
+			print((" * %02d:%02d - %02d:%02d" % (sched[0][0], sched[0][1], sched[1][0], sched[1][1])))
 
-            for sched in day["sched"]:
-                print(" * %02d:%02d - %02d:%02d" % (sched[0][0], sched[0][1], sched[1][0], sched[1][1]))
+elif options.getschedpy:
 
-    elif options.getschedpy:
+	print((p.schedule.__str__()))
 
-        print(p.schedule.__str__())
+elif options.setsched:
 
-    elif options.setsched:
+	try:
 
-        try:
+		sched = eval(options.setsched)
+		p.schedule = sched
 
-            sched = eval(options.setsched)
-            p.schedule = sched
+	except Exception as e:
 
-        except Exception as e:
-
-            print("Wrong input format: %s" % e.__str__())
-            exit(-1)
+		print(("Wrong input format: %s" % e.__str__()))
+		exit(-1)

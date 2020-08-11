@@ -37,8 +37,8 @@ p = SmartPlug("192.168.1.117", ('admin', '1234'))
 
 # change state of plug to ON
 p.state = "ON"
-print("Plug is now: ", p.state)
+print(("Plug is now: ", p.state))
 
 # change state of plug to OFF
 p.state = "OFF"
-print("Plug is now: ", p.state)
+print(("Plug is now: ", p.state))

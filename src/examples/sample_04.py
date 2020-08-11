@@ -37,11 +37,11 @@ p = SmartPlug("192.168.1.117", ('admin', '1234'))
 
 # write schedule for one week
 p.schedule = [
-        {'state': u'ON', 'sched': [[[1, 0], [1, 30]]], 'day': 0},
-        {'state': u'ON', 'sched': [[[2, 0], [2, 30]]], 'day': 1},
-        {'state': u'ON', 'sched': [[[3, 0], [3, 30]]], 'day': 2},
-        {'state': u'ON', 'sched': [[[4, 0], [4, 30]]], 'day': 3},
-        {'state': u'ON', 'sched': [[[5, 0], [5, 30]]], 'day': 4},
-        {'state': u'ON', 'sched': [[[6, 0], [6, 30]]], 'day': 5},
-        {'state': u'ON', 'sched': [[[7, 0], [7, 30]]], 'day': 6},
+        {'state': 'ON', 'sched': [[[1, 0], [1, 30]]], 'day': 0},
+        {'state': 'ON', 'sched': [[[2, 0], [2, 30]]], 'day': 1},
+        {'state': 'ON', 'sched': [[[3, 0], [3, 30]]], 'day': 2},
+        {'state': 'ON', 'sched': [[[4, 0], [4, 30]]], 'day': 3},
+        {'state': 'ON', 'sched': [[[5, 0], [5, 30]]], 'day': 4},
+        {'state': 'ON', 'sched': [[[6, 0], [6, 30]]], 'day': 5},
+        {'state': 'ON', 'sched': [[[7, 0], [7, 30]]], 'day': 6},
     ]

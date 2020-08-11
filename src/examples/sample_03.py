@@ -36,4 +36,4 @@ from ediplug.smartplug import SmartPlug
 p = SmartPlug("192.168.1.117", ('admin', '1234'))
 
 # write schedule for one day to plug (Saturday, 11:15 - 11:45)
-p.schedule = {'state': u'ON', 'sched': [[[11, 15], [11, 45]]], 'day': 6}
+p.schedule = {'state': 'ON', 'sched': [[[11, 15], [11, 45]]], 'day': 6}
